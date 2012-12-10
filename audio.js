@@ -26,7 +26,7 @@ function loadSound(soundFileName, loop, autoplay){
 	// Connect the sound source to the volume control.
 	sound.source.connect(sound.volume);
 	// Hook up the sound volume control to the main volume.
-	sound.volume.connect(mainVolume);
+	// sound.volume.connect(mainVolume);
 
 	// Make the sound source loop.
 	sound.source.loop = !!loop;
@@ -60,21 +60,34 @@ function loadSound(soundFileName, loop, autoplay){
 }
 
 
-// var background = loadSound('horror_ambience.wav', true, true);
+var background = loadSound('horror_ambience.wav', true, true);
 var monster = loadSound('monster-1.wav');
+var x = 0, y = 0, z = 0;
 // In the frame handler function, get the object's position.
 // And copy the position over to the sound of the object.
 document.addEventListener('keydown', function(evt){
-	if (evt.keyCode === 76){
-		// 'L'
-		console.log('growl left');
-		monster.panner.setPosition(-50000, -50000, -50000);
-		monster.play();
-	}else if(evt.keyCode === 82){
-		// 'R'
-		console.log('growl right');
-		monster.panner.setPosition(50000, 50000, 50000);
-		monster.play();
+	if (evt.keyCode === 65 || evt.keyCode === 37){
+		// 'w' or left arrow
+		x -= 0.1;
+	}else if(evt.keyCode === 68 || evt.keyCode === 39){
+		// 'd' or right arrow
+		x += 0.1;
+		background.panner.setPosition(x, 0, 0);
+	}else if(evt.keyCode === 87|| evt.keyCode === 38){
+		// 'w' or up arrow
+		if (evt.shiftKey){
+			z += 0.1;
+		}else{
+			y += 0.1;
+		}
+	}else if(evt.keyCode === 83 || evt.keyCode === 40){
+		// 's' or down arrow
+		if (evt.shiftKey){
+			z -= 0.1;
+		}else{
+			y -= 0.1;
+		}
 	}
-	console.log(evt);
+	background.panner.setPosition(x,y,z);
+	console.log('x: %s, y: %s, z: %s', x, y, z);
 });
